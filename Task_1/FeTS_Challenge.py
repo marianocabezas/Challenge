@@ -14,6 +14,7 @@
 
 import os
 import numpy as np
+import argparse
 
 from fets_challenge import run_challenge_experiment
 
@@ -638,8 +639,24 @@ include_validation_with_hausdorff = True
 
 # We encourage participants to experiment with partitioning_1 and partitioning_2, as well as to create
 # other partitionings to test your changes for generalization to multiple partitionings.
-institution_split_csv_filename = '10_center_split.csv'
+parser = argparse.ArgumentParser(
+    description='Train models with incremental learning approaches and '
+                'test them to obtain timeseries metrics of simple'
+                'overlap concepts.'
+)
+
+# Mode selector
+parser.add_argument(
+    '-i', '--input-split',
+    dest='split', default='small_split.csv',
+    help='Name of to the file with the collaborators.'
+)
+options = vars(parser.parse_args())
+
+# institution_split_csv_filename = '10_center_split.csv'
 # institution_split_csv_filename = 'small_split.csv'
+
+institution_split_csv_filename = options['split']
 
 # change this to point to the parent directory of the data
 brats_training_data_parent_dir = '/home/mariano/data/FeTS22/MICCAI_FeTS2022_TrainingData'
