@@ -472,6 +472,7 @@ def experimental_aggregation(
             tensor_name=tensor_name
         ),
         tensor_db.search(
+            tensor_name='valid_dice',
             metric=True
         )
     )
