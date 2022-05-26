@@ -471,29 +471,29 @@ def experimental_aggregation(
         )
     )
 
-    previous_tensor_value = tensor_db.search(
-        tensor_name=tensor_name, fl_round=fl_round, tags=('model',), origin='aggregator'
-    )
-
-    if previous_tensor_value.shape[0] > 1:
-        print(previous_tensor_value)
-        raise ValueError(f'found multiple matching tensors for {tensor_name}, tags=(model,), origin=aggregator')
-
-    if previous_tensor_value.shape[0] < 1:
-        # no previous tensor, so just return the weighted average
-        return weighted_average_aggregation(
-            local_tensors,
-            tensor_db,
-            tensor_name,
-            fl_round,
-            collaborators_chosen_each_round,
-            collaborator_times_per_round
-        )
-
-    previous_tensor_value = previous_tensor_value.nparray.iloc[0]
-
-    # compute the deltas for each collaborator
-    deltas = [t.tensor - previous_tensor_value for t in local_tensors]
+    # previous_tensor_value = tensor_db.search(
+    #     tensor_name=tensor_name, fl_round=fl_round, tags=('model',), origin='aggregator'
+    # )
+    #
+    # if previous_tensor_value.shape[0] > 1:
+    #     print(previous_tensor_value)
+    #     raise ValueError(f'found multiple matching tensors for {tensor_name}, tags=(model,), origin=aggregator')
+    #
+    # if previous_tensor_value.shape[0] < 1:
+    #     # no previous tensor, so just return the weighted average
+    #     return weighted_average_aggregation(
+    #         local_tensors,
+    #         tensor_db,
+    #         tensor_name,
+    #         fl_round,
+    #         collaborators_chosen_each_round,
+    #         collaborator_times_per_round
+    #     )
+    #
+    # previous_tensor_value = previous_tensor_value.nparray.iloc[0]
+    #
+    # # compute the deltas for each collaborator
+    # deltas = [t.tensor - previous_tensor_value for t in local_tensors]
 
     # here are the tensor values themselves
     tensor_values = [t.tensor for t in local_tensors]
