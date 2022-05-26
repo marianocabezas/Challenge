@@ -197,8 +197,10 @@ def constant_hyper_parameters(collaborators,
     # these are the hyperparameters used in the May 2021 recent training of the actual FeTS Initiative
     # they were tuned using a set of data that UPenn had access to, not on the federation itself
     # they worked pretty well for us, but we think you can do better :)
-    epochs_per_round = 1.0
-    batches_per_round = None
+    # epochs_per_round = 1.0
+    # batches_per_round = None
+    epochs_per_round = None
+    batches_per_round = 10
     learning_rate = 5e-5
     return (learning_rate, epochs_per_round, batches_per_round)
 
@@ -467,6 +469,9 @@ def experimental_aggregation(
 
     print(
         tensor_db.search(
+            tensor_name=tensor_name
+        ),
+        tensor_db.search(
             metric=True
         )
     )
@@ -479,7 +484,7 @@ def experimental_aggregation(
     #     print(previous_tensor_value)
     #     raise ValueError(f'found multiple matching tensors for {tensor_name}, tags=(model,), origin=aggregator')
     #
-    # if previous_tensor_value.shape[0] < 1:
+    # if fl_round == 0:
     #     # no previous tensor, so just return the weighted average
     #     return weighted_average_aggregation(
     #         local_tensors,
