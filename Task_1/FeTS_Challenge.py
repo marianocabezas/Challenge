@@ -414,6 +414,73 @@ def weighted_average_aggregation(local_tensors,
     # so we can just use numpy.average
     return np.average(tensor_values, weights=weight_values, axis=0)
 
+
+# the simple example of weighted FedAVG
+def experimental_aggregation(
+    local_tensors,
+    tensor_db,
+    tensor_name,
+    fl_round,
+    collaborators_chosen_each_round,
+    collaborator_times_per_round
+):
+    """Aggregate tensors. This aggregator clips all tensor values to the 80th percentile
+    of the absolute values to prevent extreme changes.
+
+    Args:
+        local_tensors(list[openfl.utilities.LocalTensor]): List of local tensors to aggregate.
+        tensor_db: pd.DataFrame that contains global tensors / metrics.
+            Columns: ['tensor_name', 'origin', 'round', 'report',  'tags', 'nparray']
+        tensor_name: name of the tensor
+        fl_round: round number
+        collaborators_chosen_each_round: a dictionary of {round: list of collaborators}.
+         Each list indicates which collaborators trained in that given round.
+        collaborator_times_per_round: a dictionary of {round: {collaborator: total_time_taken_in_round}}.
+    """
+    #        Convenience method to retrieve tensor from the dataframe.
+    #        Args:
+    #            tensor_name [ optional ] : The name of the tensor (or metric) to retrieve
+    #            origin      [ optional ] : Origin of the tensor
+    #            fl_round    [ optional ] : Round the tensor is associated with
+    #            metric:     [ optional ] : Is the tensor a metric?
+    #            tags:       [ optional ] : Tuple of unstructured tags associated with the tensor
+    #                                       should it be overwritten?
+    # if tensor_name not in tensor_db.search(tags=('weight_speeds',))['tensor_name']:
+    #     # weight_speeds[tensor_name] = np.zeros_like(local_tensors[0].tensor)
+    #     # weight_speeds[tensor_name] = np.zeros(local_tensors[0].tensor.shape)
+    #     tensor_db.store(
+    #         tensor_name=tensor_name,
+    #         tags=('weight_speeds',),
+    #         nparray=np.zeros_like(local_tensors[0].tensor),
+    #     )
+    #     tensor_weight_speed = tensor_db.retrieve(
+    #         tensor_name=tensor_name,
+    #         tags=('weight_speeds',)
+    #     )
+    #
+    # for _, record in tensor_db.iterrows():
+    #     if (record['round'] == fl_round
+    #             and record["tensor_name"] == tensor_name
+    #             and record["tags"] == ("aggregated",)):
+    #         previous_tensor_value = record['nparray']
+    #         break
+
+    print(
+        tensor_db.search(
+            tensor_name=tensor_name
+        )
+    )
+
+    # here are the tensor values themselves
+    tensor_values = [t.tensor for t in local_tensors]
+
+    # and the weights (i.e. data sizes)
+    weight_values = [t.weight for t in local_tensors]
+
+    # so we can just use numpy.average
+    return np.average(tensor_values, weights=weight_values, axis=0)
+
+
 # here we will clip outliers by clipping deltas to the Nth percentile (e.g. 80th percentile)
 def clipped_aggregation(local_tensors,
                         tensor_db,
@@ -626,7 +693,7 @@ def FedAvgM_Selection(local_tensors,
 
 
 # change any of these you wish to your custom functions. You may leave defaults if you wish.
-aggregation_function = weighted_average_aggregation
+aggregation_function = experimental_aggregation
 choose_training_collaborators = all_collaborators_train
 training_hyper_parameters_for_round = constant_hyper_parameters
 
