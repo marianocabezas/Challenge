@@ -540,25 +540,6 @@ def dice_based(
     #            metric:     [ optional ] : Is the tensor a metric?
     #            tags:       [ optional ] : Tuple of unstructured tags associated with the tensor
     #                                       should it be overwritten?
-    # if tensor_name not in tensor_db.search(tags=('weight_speeds',))['tensor_name']:
-    #     # weight_speeds[tensor_name] = np.zeros_like(local_tensors[0].tensor)
-    #     # weight_speeds[tensor_name] = np.zeros(local_tensors[0].tensor.shape)
-    #     tensor_db.store(
-    #         tensor_name=tensor_name,
-    #         tags=('weight_speeds',),
-    #         nparray=np.zeros_like(local_tensors[0].tensor),
-    #     )
-    #     tensor_weight_speed = tensor_db.retrieve(
-    #         tensor_name=tensor_name,
-    #         tags=('weight_speeds',)
-    #     )
-    #
-    # for _, record in tensor_db.iterrows():
-    #     if (record['round'] == fl_round
-    #             and record["tensor_name"] == tensor_name
-    #             and record["tags"] == ("aggregated",)):
-    #         previous_tensor_value = record['nparray']
-    #         break
 
     # previous_tensor_value = tensor_db.search(
     #     tensor_name=tensor_name, fl_round=fl_round, tags=('model',), origin='aggregator'
