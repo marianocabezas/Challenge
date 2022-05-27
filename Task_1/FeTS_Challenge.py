@@ -562,14 +562,14 @@ def dice_based(
 
     current_collaborators = collaborators_chosen_each_round[fl_round]
     dice_init = [
-        tensor_db.retieve(
+        tensor_db.retrieve(
             tensor_name='valid_dice', fl_round=fl_round,
             tags=(collaborator, 'metric', 'validate_agg')
         )['nparray']
         for collaborator in current_collaborators
     ]
     new_dice = [
-        tensor_db.retieve(
+        tensor_db.retrieve(
             tensor_name='valid_dice', fl_round=fl_round,
             tags=(collaborator, 'metric', 'validate_local')
         )['nparray']
