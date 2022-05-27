@@ -561,6 +561,11 @@ def dice_based(
         )
 
     current_collaborators = collaborators_chosen_each_round[fl_round]
+    for collaborator in current_collaborators:
+        print(tensor_db.retrieve(
+            tensor_name='valid_dice', fl_round=fl_round,
+            tags=(collaborator, 'metric', 'validate_agg')
+        ))
     dice_init = [
         tensor_db.retrieve(
             tensor_name='valid_dice', fl_round=fl_round,
