@@ -561,11 +561,21 @@ def dice_based(
         )
 
     current_collaborators = collaborators_chosen_each_round[fl_round]
-    dice_values = tensor_db.search(
-        tensor_name='valid_dice',
-        fl_round=fl_round
-    )
-    print(dice_values, [t.weight for t in local_tensors])
+    dice_init = [
+        tensor_db.retieve(
+            tensor_name='valid_dice', fl_round=fl_round,
+            tags=(collaborator, 'metric', 'validate_agg')
+        )['nparray']
+        for collaborator in current_collaborators
+    ]
+    new_dice = [
+        tensor_db.retieve(
+            tensor_name='valid_dice', fl_round=fl_round,
+            tags=(collaborator, 'metric', 'validate_local')
+        )['nparray']
+        for collaborator in current_collaborators
+    ]
+    print([new_i - init_i for new_i, init_i in zip(new_dice, dice_init)], [t.weight for t in local_tensors])
     #
     # previous_tensor_value = previous_tensor_value.nparray.iloc[0]
     #
