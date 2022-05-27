@@ -579,11 +579,12 @@ def dice_based(
             collaborator_times_per_round
         )
 
-    print(collaborators_chosen_each_round)
-    tensor_db.retrieve(
+    current_collaborators = collaborators_chosen_each_round[fl_round]
+    dice_values = tensor_db.search(
         tensor_name='valid_dice',
-        tags=('weight_speeds',)
+        fl_round=fl_round
     )
+    print(dice_values, [t.weight for t in local_tensors])
     #
     # previous_tensor_value = previous_tensor_value.nparray.iloc[0]
     #
@@ -595,11 +596,6 @@ def dice_based(
 
     # and the weights (i.e. data sizes)
     weight_values = [t.weight for t in local_tensors]
-
-    tensor_db.search(
-        tensor_name='valid_dice',
-        metric=True
-    )
 
     # so we can just use numpy.average
     return np.average(tensor_values, weights=weight_values, axis=0)
